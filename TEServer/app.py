@@ -1,22 +1,14 @@
-from flask import Flask,jsonify,request
+from flask import Flask, render_template
+from flask_socketio import SocketIO,send
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
 
-angle = 0
-
-@app.route('/')
-def index():
-    return "Go to http://[hostname]/motor/api/  to get it."
-
-@app.route('/motor/api/', methods=['GET'])
-def getIt():
-    return jsonify({'angle': angle})
-
-@app.route('/motor/api/<string:vrangle>', methods=['POST'])
-def updateIt(vrangle):
-    angle = int(vrangle[7:])
-    return jsonify({'angle': angle})
-
+@socketio.on('works'):
+def handleMessage(msg):
+    print "message: " + msg
+    send(msg,broadcast=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app)
