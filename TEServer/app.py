@@ -12,9 +12,9 @@ def index():
 def getIt():
     return jsonify({'angle': angle})
 
-@app.route('/motor/api/<int:vrangle>', methods=['POST'])
+@app.route('/motor/api/<string:vrangle>', methods=['POST'])
 def updateIt(vrangle):
-    angle = vrangle
+    angle = int(vrangle[7:])
     return jsonify({'angle': angle})
 
 
